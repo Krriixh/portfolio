@@ -2,7 +2,7 @@ export const caseStudies = {
   axiom: {
     title: "Axiom",
     tagline: "Personal macOS study infrastructure · Data engineering · Offline analytics",
-    banner: "/assets/projects/Dashboard.webp",
+    banner: import.meta.env.BASE_URL + "assets/projects/Dashboard.webp",
     github: "https://github.com/Krriixh/Axiom",
     content: `
 ## Overview
@@ -41,7 +41,7 @@ Axiom has completely overhauled my self-directed learning. By treating my own ti
   blackwood: {
     title: "Blackwood",
     tagline: "Native desktop guitar companion · Web Audio API · Stage-based curriculum",
-    banner: "/assets/projects/Blackwood Dashboard.webp",
+    banner: import.meta.env.BASE_URL + "assets/projects/Blackwood Dashboard.webp",
     github: "https://github.com/Krriixh/blackwood",
     content: `
 ## Overview

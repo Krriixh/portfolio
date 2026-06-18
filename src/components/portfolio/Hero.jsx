@@ -137,7 +137,7 @@ export default function Hero() {
                 View Projects
               </button>
               <a
-                href="/assets/Krrish_CV_Final.pdf"
+                href={`${import.meta.env.BASE_URL}assets/Krrish_CV_Final.pdf`}
                 download="Krrish_CV_Final.pdf"
                 data-cursor-hover
                 data-cursor-text="Download"
@@ -189,7 +189,7 @@ export default function Hero() {
               <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-[#0A0A0A] relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
                 <img
-                  src="/assets/profile_photo.webp"
+                  src={`${import.meta.env.BASE_URL}assets/profile_photo.webp`}
                   alt="Krrish Raj Chauhan"
                   className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
                 />

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Github, Linkedin, Mail, ArrowDown, Download } from "lucide-react";
 
-const ROLES = ["Full Stack Developer", "AI Enthusiast", "Problem Solver", "Native App Builder"];
+const ROLES = ["Full Stack Developer", "Native App Engineer", "Problem Solver", "Builder of Personal Tools"];
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
 
 const stagger = {
@@ -15,10 +15,50 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 };
 
+function getGreeting() {
+  const hour = new Date().getHours();
+  const day = new Date().getDay();
+  
+  if (hour >= 0 && hour < 5) return "Late night scrolling? Same here.";
+  if (hour >= 5 && hour < 12) return "Grab a coffee. Let's look at some code.";
+  if (hour >= 12 && hour < 17) return "Good afternoon. Welcome to my workspace.";
+  if (day === 5 && hour >= 17) return "Almost the weekend. Thanks for stopping by.";
+  return "Good evening. Welcome to my workspace.";
+}
+
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
+
+  // 3D Tilt Effect Setup
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+
+
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   const decrypt = useCallback((target) => {
     let iteration = 0;
@@ -59,7 +99,7 @@ export default function Hero() {
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
 
-      {/* Subtle grid lines — barely visible */}
+      {/* Subtle grid lines & Ambient Orbs */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none">
         <div className="absolute top-0 left-1/4 w-px h-full bg-white" />
         <div className="absolute top-0 left-2/4 w-px h-full bg-white" />
@@ -67,6 +107,9 @@ export default function Hero() {
         <div className="absolute top-1/3 left-0 w-full h-px bg-white" />
         <div className="absolute top-2/3 left-0 w-full h-px bg-white" />
       </div>
+
+      <div className="ambient-orb bg-red-500/20 w-[40rem] h-[40rem] top-[-10%] left-[-10%]" />
+      <div className="ambient-orb bg-blue-500/10 w-[50rem] h-[50rem] bottom-[-20%] right-[-10%]" style={{ animationDelay: '-10s' }} />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-16 w-full pt-24 pb-16">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
@@ -78,9 +121,9 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
           >
-            {/* Eyebrow label */}
+            {/* Eyebrow label - Time Aware */}
             <motion.p variants={item} className="section-label mb-6">
-              Portfolio
+              {getGreeting()}
             </motion.p>
 
             {/* Editorial headline — weight contrast */}
@@ -109,18 +152,19 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* Human tagline */}
+            {/* Core tagline — the real story */}
             <motion.p
               variants={item}
-              className="text-white/35 text-base sm:text-lg leading-relaxed max-w-md mx-auto lg:mx-0 mb-3"
+              className="text-white/60 text-lg sm:text-xl leading-relaxed max-w-md mx-auto lg:mx-0 mb-3 font-heading"
+              style={{ letterSpacing: "-0.02em" }}
             >
-              I build native apps and design systems
-              <br className="hidden sm:block" /> that people actually enjoy using.
+              I build software for myself,<br className="hidden sm:block" />
+              <span className="text-white/35"> then realize others need it too.</span>
             </motion.p>
 
-            {/* Currently line */}
+            {/* Currently line — specific, alive */}
             <motion.p variants={item} className="section-label mb-10">
-              Currently · 4th year @ LPU · Open to opportunities
+              Currently building Axiom v2 · LPU '27 · Open to work
             </motion.p>
 
             {/* CTAs */}
@@ -132,16 +176,16 @@ export default function Hero() {
                 onClick={scrollToProjects}
                 data-cursor-hover
                 data-cursor-text="View"
-                className="px-8 py-3.5 bg-white text-[#050505] font-heading font-semibold text-sm rounded-full hover:bg-white/90 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.18)] hover:scale-[1.02]"
+                className="magnetic-btn px-8 py-3.5 bg-white text-[#050505] font-heading font-semibold text-sm rounded-full hover:bg-white/90 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.18)] hover:scale-[1.02]"
               >
-                View Projects
+                See the Work
               </button>
               <a
                 href={`${import.meta.env.BASE_URL}assets/Krrish_CV_Final.pdf`}
                 download="Krrish_CV_Final.pdf"
                 data-cursor-hover
                 data-cursor-text="Download"
-                className="px-8 py-3.5 border border-white/15 text-white/60 font-heading font-medium text-sm rounded-full hover:border-white/35 hover:text-white transition-all duration-300 flex items-center gap-2 hover:scale-[1.02]"
+                className="magnetic-btn px-8 py-3.5 border border-white/15 text-white/60 font-heading font-medium text-sm rounded-full hover:border-white/35 hover:text-white transition-all duration-300 flex items-center gap-2 hover:scale-[1.02]"
               >
                 <Download size={14} />
                 Download Resume
@@ -179,22 +223,30 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative shrink-0 lg:ml-12"
+            className="relative shrink-0 lg:ml-12 perspective-[1000px]"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
           >
             {/* Soft backdrop glow */}
             <div className="absolute -inset-4 bg-white/[0.03] blur-3xl rounded-[3rem] pointer-events-none" />
             
             {/* The Glass Vessel */}
-            <div className="relative w-72 h-80 sm:w-80 sm:h-[26rem] lg:w-[26rem] lg:h-[34rem] rounded-[2rem] p-2 border border-white/10 bg-white/[0.04] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-xl flex items-center justify-center transform hover:-translate-y-2 transition-transform duration-700 ease-out group">
-              <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-[#0A0A0A] relative">
+            <motion.div 
+              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              className="relative w-72 h-80 sm:w-80 sm:h-[26rem] lg:w-[26rem] lg:h-[34rem] rounded-[2rem] p-2 border border-white/10 bg-white/[0.04] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-xl flex items-center justify-center transition-shadow duration-300 hover:shadow-[0_30px_70px_-15px_rgba(255,255,255,0.05)] group"
+            >
+              <div 
+                className="w-full h-full rounded-[1.5rem] overflow-hidden bg-[#0A0A0A] relative"
+                style={{ transform: "translateZ(30px)" }}
+              >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
                 <img
                   src={`${import.meta.env.BASE_URL}assets/profile_photo.webp`}
                   alt="Krrish Raj Chauhan"
-                  className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110 group-hover:opacity-90"
                 />
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 

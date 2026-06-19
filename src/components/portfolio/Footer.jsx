@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
+import Terminal from "./Terminal";
 
 export default function Footer() {
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
   return (
     <footer className="border-t border-white/[0.06] py-10">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-mono text-[11px] text-white/20 tracking-wider">
+          <p className="font-mono text-[11px] text-white/20 tracking-wider flex items-center">
             © Krrish Raj Chauhan
+            <span 
+              onClick={() => setIsTerminalOpen(true)}
+              className="ml-2 cursor-pointer opacity-50 hover:opacity-100 hover:text-green-400 transition-all"
+            >
+              <span className="animate-pulse">_</span>
+            </span>
           </p>
           <div className="flex items-center gap-5">
             <a
@@ -35,6 +44,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <Terminal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
     </footer>
   );
 }

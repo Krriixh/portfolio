@@ -31,7 +31,7 @@ export default function Contact() {
   return (
     <section id="contact" className="py-20 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-16">
-        <SectionHeader label="Get In Touch" title="Contact Me" />
+        <SectionHeader label="Say Hello" title="Let's Talk" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mt-16">
           {/* Info */}
@@ -42,8 +42,9 @@ export default function Contact() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="text-white/45 text-base leading-relaxed mb-10 max-w-md">
-              Have a project in mind, want to collaborate, or just want to say hi? 
-              Drop me a message and I'll get back to you as soon as possible.
+              If you're building something worth building, I want to hear about it.
+              I'm also open to full-time roles, internships, and any excuse to talk
+              about local-first software or DSP pipelines.
             </p>
 
             <div className="space-y-4">
